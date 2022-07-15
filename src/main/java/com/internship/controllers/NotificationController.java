@@ -79,6 +79,9 @@ public class NotificationController {
         }
         else
         {
+            for (Product p : notificationRepository.findById(notification.getId()).get().getProduct()){
+                p.setBusy(false);
+            }
             Notification notificationUpdate = notification;
             notificationUpdate.setProduct(myParams);
             for (Product p : notificationUpdate.getProduct()){
