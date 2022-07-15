@@ -68,6 +68,10 @@
         box-shadow: 1px 1px 7px 0px;
     }
 
+    .tableDiv{
+    width: 1000px;
+    }
+
     .notificationInfo{
         padding: 30px 20px;
         border: 1px solid black;
@@ -85,5 +89,5 @@
     }
 
     .searchElement:not(:last-child){
-        border-right: 1px solid;
+        border-right: 2px solid gray;
     }

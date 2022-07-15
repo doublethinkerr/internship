@@ -69,26 +69,32 @@ public class NotificationController {
 
     @PostMapping("/notification/add")
     public String notificationAddPost(Notification notification, @RequestParam(value="checkBoxList[]", required = false) Set<Product> myParams, Model model){
-
-        if (notification.getId()==null){
-            notification.setProduct(myParams);
-            for (Product p : notification.getProduct()){
-                p.setBusy(true);
+/*        try {*/
+            if (notification.getId() == null) {
+                notification.setProduct(myParams);
+                if(myParams != null && !myParams.isEmpty()) {
+                    for (Product p : notification.getProduct()) {
+                        p.setBusy(true);
+                    }
+                }
+                notificationRepository.save(notification);
+            } else {
+                for (Product p : notificationRepository.findById(notification.getId()).get().getProduct()) {
+                    p.setBusy(false);
+                }
+                Notification notificationUpdate = notification;
+                notificationUpdate.setProduct(myParams);
+                if(myParams != null && !myParams.isEmpty()) {
+                    for (Product p : notificationUpdate.getProduct()) {
+                        p.setBusy(true);
+                    }
+                }
+                notificationRepository.save(notificationUpdate);
             }
-            notificationRepository.save(notification);
-        }
-        else
-        {
-            for (Product p : notificationRepository.findById(notification.getId()).get().getProduct()){
-                p.setBusy(false);
-            }
-            Notification notificationUpdate = notification;
-            notificationUpdate.setProduct(myParams);
-            for (Product p : notificationUpdate.getProduct()){
-                p.setBusy(true);
-            }
-            notificationRepository.save(notificationUpdate);
-        }
+/*        } catch (Exception ex){
+            statusMessage = ex.getMessage();
+            return "redirect:/notification";
+        }*/
         return "redirect:/notification";
     }
 
