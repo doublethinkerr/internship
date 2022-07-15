@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="blocks/headLink :: headLink"></div>
+</head>
+<body>
+
+    <div id="main">
+        <div id="content">
+            <p class="ten"><a href="#"><span>&#8594;</span>просмотр уведомления<span>&#8592;</span></a></p>
+
+            <div class="notificationInfo">
+                <a th:href="${backLink}" class="btn btn-light mb-3">Назад</a>
+                <p>ID: <span th:text="${notification.id}"></span></p>
+                <p>Отправитель: <span th:text="${notification.sender}"></span></p>
+                <p>Получатель: <span th:text="${notification.receiver}"></span></p>
+                <p>Дата приема: <span th:text="${notification.dateOfReceipt}"></span></p>
+                <p>Дата создания: <span th:text="${notification.dateOfCreation}"></span></p>
+                <p>Статус уведомления: <span th:text="${notification.status}"></span></p>
+                <p>Пункт пропуска: <span th:text="${notification.checkpoint}"></span></p>
+                <p>Список продуктов:
+                    <div th:each="el : ${notification.product}">
+                        <span th:text="${el.name}"></span>
+                    </div>
+                </p>
+                <p>Дополнительная информация: <span th:text="${notification.description}"></span></p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

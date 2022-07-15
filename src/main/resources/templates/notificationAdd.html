@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="blocks/headLink :: headLink"></div>
+</head>
+
+<body>
+
+<div id="main">
+    <div id="content">
+        <p class="ten"><a href="#"><span>&#8594;</span>добавление/редактирование уведомления<span>&#8592;</span></a></p>
+
+        <a href="/notification" class="btn btn-light mb-3">Назад</a>
+
+        <form action="/notification/add" method="post">
+
+            <input type="hidden" id="custId" name="id" th:value="${notification.id}">
+
+            <input type="text" th:value="${notification.sender}" name="sender" placeholder="Введите отправителя" class="form-control" required><br>
+
+            <input type="text" th:value="${notification.receiver}" name="receiver" placeholder="Введите получателя" class="form-control" required><br>
+
+            <label for="receiptDate">Выберите дату поступления груза</label>
+            <input type="date" th:value="${notification.dateOfReceipt}" id="receiptDate" min="2000-01-01" name="dateOfReceipt" required/>
+
+            <label for="createDate">Выберите дату создания уведомления</label>
+            <input type="date" th:value="${notification.dateOfCreation}" id="createDate" min="2000-01-01" name="dateOfCreation" class="mb-3" required/><br>
+
+            <label for="createDate">Выберите статус уведомления</label>
+            <select class="form-control mb-3" id="dropDownList" name="status">
+                <option th:each="option : ${statusOptions}" th:value="${option}" th:text="${option}"></option>
+            </select>
+
+            <label for="createDate">Выберите пункт пропуска</label>
+            <select class="form-control mb-4" name="checkpoint">
+                <option th:each="option : ${checkpointOptions}" th:value="${option.id}" th:text="${option.name}"></option>
+            </select>
+
+            <fieldset class="mb-4 productList">
+                <legend>Выберите продукты</legend>
+                <div th:if="${#lists.isEmpty(products)}">
+                    Продуктов для добавления нет
+                </div>
+                <div th:each="el : ${products}">
+                    <input type="checkbox" th:text="${el.name}" th:value="${el.id}" name="checkBoxList[]">
+                </div>
+                <div th:each="el : ${notification.product}">
+                    <input type="checkbox" th:text="${el.name}" th:value="${el.id}" name="checkBoxList[]" checked>
+                </div>
+            </fieldset>
+
+            <textarea class="form-control" name="description" th:text="${notification.description}" id="textAreaDescription"
+                      placeholder="Введите дополнительную информацию" maxlength="255">
+            </textarea>
+
+            <button type="submit" class="btn bg-secondary mt-5">Создать уведомление</button>
+        </form>
+
+    </div>
+</div>
+
+<div th:insert="blocks/footerLink :: footerLink "></div>
+
+</body>
+</html>

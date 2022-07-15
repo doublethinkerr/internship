@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="blocks/headLink :: headLink"></div>
+</head>
+<body>
+
+<div id="main">
+    <div id="content" class="col-lg-4 col-md-6 col-sm-12">
+
+        <p class="ten"><a href="/notification"><span>&#8594;</span>список уведомлений<span>&#8592;</span></a></p>
+
+        <div th:switch="${statusMessage}">
+            <div th:case="''"></div>
+            <div th:case="*">
+                <span th:text="${statusMessage}" class="message"></span>
+            </div>
+        </div>
+
+        <div class="my-4">
+            <a th:href="'/notification/add'" class="btn btn-light"> Создать уведомление</a>
+            <a th:href="'/notification/addProduct'" class="btn btn-light"> Создать продукцию</a>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-lg-4 col-md-12 searchElement">
+                <p>Поиск по статусу:</p>
+                    <form action="/notification/statusSearch" method="post">
+                        <select class="form-control" id="dropDownList" name="status">
+                            <option th:each="option : ${statusOptions}" th:value="${option}" th:text="${option}"></option>
+                        </select>
+                        <button type="submit" class="btn bg-secondary" id="statusSearchButton">Найти</button>
+                    </form>
+            </div>
+            <div class="col-lg-4 col-md-12 searchElement">
+                <p>Поиск по названию продукции:</p>
+                <form action="/notification/productSearch" method="post">
+                    <input type="text" class="form-control" name="productName" id="searchField" placeholder="введите текст для поиска">
+                    <button type="submit" class="btn bg-secondary" id="productSearchButton">Найти</button>
+                </form>
+            </div>
+            <div class="col-lg-4 col-md-12 searchElement">
+                <p>Поиск по дате поступления:</p>
+                <form action="/notification/dateSearch" method="post">
+                    <label>Выберите начальную дату</label>
+                    <input type="date" class="form-control" name="startDate">
+
+                    <label>Выберите конечную дату</label>
+                    <input type="date" class="form-control" name="endDate">
+
+                    <button type="submit" class="btn bg-secondary" id="dateSearchButton">Найти</button>
+                </form>
+            </div>
+        </div>
+
+        <table class="col-lg-12 col-md-12 col-sm-12 table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">ИД</th>
+                <th scope="col">Отправитель</th>
+                <th scope="col">Получатель</th>
+                <th scope="col">Дата поступления</th>
+                <th scope="col">Статус уведомления</th>
+                <th scope="col">Название продукции</th>
+                <th scope="col" class="text-center">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+                    <tr th:each="el : ${nots.page}">
+                        <th scope="row">
+                            <a th:href="'/notification/' + ${el.id}">
+                                <strong><div th:text="${el.id}"></div></strong>
+                            </a>
+                        </th>
+                        <td th:text="${el.sender}"></td>
+                        <td th:text="${el.receiver}"></td>
+                        <td th:text="${el.dateOfReceipt}"></td>
+                        <td th:text="${el.status}"></td>
+                        <td>
+                            <span th:each="pr : ${el.product}">
+                                <span th:text="${pr.name}+';'"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <a th:href="'/notification/' + ${el.id}" class="btn btn-light"> Просмотр</a>
+                        </td>
+                        <td>
+                            <div th:if="${el.status.name} == 'CREATED'">
+                                <a th:href="'/notification/' + ${el.id} + '/edit'" class="btn btn-light"> Редактировать</a>
+                            </div>
+                            <div th:unless="${el.status.name} == 'CREATED'">
+                                <p></p>
+                            </div>
+                        </td>
+                        <td>
+                            <form th:action="'/notification/' + ${el.id} + '/remove'" method="post">
+                                <button class="btn btn-dark" type="submit"> Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+
+        <div class="pagable container text-center">
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${nots.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!nots.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/notification/?pageNumber=' + ${nots.paging.pageNumber - 1}}"
+                           tabindex="-1">Предыдущая страница</a>
+                    </li>
+                    <th:block th:each="item : ${nots.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == nots.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/notification/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!nots.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/notification/?pageNumber=' + ${nots.paging.pageNumber + 1}}">Следующая страница</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+<div th:insert="blocks/footerLink :: footerLink "></div>
+</body>
+</html>

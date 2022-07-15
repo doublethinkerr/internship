@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="blocks/headLink :: headLink"></div>
+</head>
+<body>
+
+<div id="main">
+    <div id="content">
+        <h1 class="text-center">Редактирование уведомления</h1>
+        <a href="/notification" class="btn btn-light mb-3">Назад</a>
+
+        <form method="post" action="">
+            <input type="text" th:value="${notification.sender}" name="sender" class="form-control"><br>
+
+            <input type="text" th:value="${notification.receiver}" name="receiver" class="form-control"><br>
+
+            <label for="receiptDate">Выберите дату поступления груза</label>
+            <input type="date" th:value="${notification.dateOfReceipt}" id="receiptDate" name="dateOfReceipt"/>
+
+            <label for="createDate">Выберите дату создания уведомления</label>
+            <input type="date" th:value="${notification.dateOfCreation}" id="createDate" name="dateOfCreation" class="mb-3"/><br>
+
+
+            <label for="createDate">Выберите статус уведомления</label>
+            <select class="form-control mb-3" id="dropDownList" name="status">
+                <option value="0">Выберите статус</option>
+                <option th:each="option : ${statusOptions}" th:value="${option}" th:text="${option}"></option>
+            </select>
+
+            <label for="createDate">Выберите пункт пропуска</label>
+            <select class="form-control mb-3" name="checkpoint">
+                <option value="0">Выберите пункт</option>
+                <option th:each="option : ${checkpointOptions}" th:value="${option.id}" th:text="${option.name}" ></option>
+            </select>
+
+            <fieldset class="mb-4 productList">
+                <legend>Выберите продукты</legend>
+                <div th:each="el : ${products}">
+                    <input type="checkbox" th:text="${el.id}" th:value="${el.id}" name="checkBoxList[]">
+                </div>
+            </fieldset>
+
+            <textarea class="form-control" th:text="${notification.description}" name="description" id="textAreaDescription" cols="30" rows="10"></textarea>
+
+
+            <button type="submit" class="btn btn-primary mt-3">Обновить</button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

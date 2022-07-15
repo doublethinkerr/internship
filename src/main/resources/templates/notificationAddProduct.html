@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="blocks/headLink :: headLink"></div>
+</head>
+
+<body>
+
+<div id="main">
+    <div id="content">
+        <p class="ten"><a href="#"><span>&#8594;</span>добавление продукта<span>&#8592;</span></a></p>
+        <a href="/notification" class="btn btn-light mb-3">Назад</a>
+
+        <form action="" method="post">
+
+            <input type="number" name="count" placeholder="Введите количество" class="form-control"><br>
+
+            <input type="text" name="name" placeholder="Введите название" class="form-control"><br>
+
+            <label>Выберите единицу измерения</label>
+            <select class="form-control mb-3" id="dropDownList" name="unit">
+                <option th:each="option : ${unitOptions}" th:text="${option.name}" th:value="${option.id}" ></option>
+            </select>
+
+            <button type="submit" class="btn bg-secondary mt-5">Создать продукт</button>
+        </form>
+
+    </div>
+</div>
+
+<div th:insert="blocks/footerLink :: footerLink "></div>
+
+</body>
+</html>
